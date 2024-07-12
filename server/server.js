@@ -2,6 +2,7 @@
 import express from 'express';
 import { MongoClient, ObjectId } from 'mongodb';
 import dotenv from 'dotenv';
+import cors from 'cors'
 
 dotenv.config();
 const url = process.env.MONGO_DB_URL;
@@ -11,6 +12,7 @@ const collectionName = process.env.MONGO_DB_COLLECTION;
 const app = express();
 // Middleware to parse JSON bodies
 app.use(express.json());
+app.use(cors());
 const PORT = 3000;
 
 // start endpoint
