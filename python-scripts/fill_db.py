@@ -12,19 +12,36 @@ jobs = [fake.job() for _ in range(10)]
 concrete_jobs = ["HR", "Systems Manager"]
 jobs += concrete_jobs
 
-def create_random_person(): 
+num_people_to_be_generated = 20
+
+def create_random_person(id): 
     """jobs = ["Software Engineer", "Human Resources", "Product Manager",
             "Data Engineer", "Marketing Manager", "Systems Engineer",
             "HR Coordinator", "Project Manager", "Network Engineer"]"""
     chosen_job = random.choice(jobs)
+    hr_names = ['human resources', 'hr']
     return {
+        "id": id,
         "firstName": fake.first_name(),
         "lastName": fake.last_name(),
         "jobRole": chosen_job,
         "isManager": "manager" in chosen_job.lower(),
+        "isHR": any(job in chosen_job.lower() for job in hr_names),
+        "manages": [],
         "location": random.choice(locations),
         "salary": random.randint(35000, 150000)
     }
+
+def assign_managers(people): 
+    # want to get all non managers
+    non_managers = [person for person in people if not person['isManager']]
+    if len(non_managers) != len(people):
+        # want to get all managers
+        managers = [person for person in people if person['isManager']]
+        print(managers)
+        for person in non_managers:
+            manager = random.choice(managers)
+            manager['manages'].append(person['id'])
 
 
 def fill_db():
@@ -43,7 +60,8 @@ def fill_db():
     # select collection / create if not existing
     collection = db[collection_name]
     
-    data = [create_random_person() for _ in range(20)]
+    data = [create_random_person(i+1) for i in range(num_people_to_be_generated)]
+    assign_managers(data)
 
     # deletes the entire collection (so we can add new data instead of appending)
     collection.delete_many({})
