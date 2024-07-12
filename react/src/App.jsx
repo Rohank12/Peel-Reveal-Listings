@@ -1,20 +1,22 @@
 import { useState } from 'react'
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css'
-import employeesData from "./components/employees";
 import Home from './components/Home'
 import Search from './components/Search'
 import EmployeeList from './components/EmployeeList'
 
 const App = () => {
   
-  const [employees, setEmployees] = useState(employeesData);
+  //const [employees, setEmployees] = useState(employeesData);
 
   return (
-    <div className="App">
-      <Home />
-      
-      
-    </div>
+    <Router>
+      <div>
+        <Routes>
+          <Route exact path="/employees" element={<EmployeeList />} />
+        </Routes>
+      </div>
+    </Router>
   );
 };
 
