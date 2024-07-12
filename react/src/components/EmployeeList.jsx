@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/AuthContext';
+import { FixedSizeList as List } from 'react-window'
 
 const EmployeeList = () => {
     const { user } = useAuth(); // currently logged in user
     const [employees, setEmployees] = useState([]);
     console.log(user)
+    const ROW_HEIGHT = 50;
+    const COLUMN_WIDTH = 300;
   
     useEffect(() => {
       fetchEmployees();
@@ -27,14 +30,32 @@ const EmployeeList = () => {
     return (
       <div>
         <h2>Employee Directory</h2>
-        <div className="employee-list">
-          {employees.map((employee) => (
-            <div key={employee.id} className="employee-item">
-              <p>{employee.firstName}</p>
-            </div>
-          ))}
+        <div>
+          <div style= {{ display: 'flex', borderBottom: '1px solid #ddd'}}>
+          <div style= {{ width: COLUMN_WIDTH }}> Name </div>
+          <div style= {{ width: COLUMN_WIDTH }}> Phone Number </div>
+          <div style= {{ width: COLUMN_WIDTH }}> Job Role </div>
+          <div style= {{ width: COLUMN_WIDTH }}> Work Location </div>
+          <div style= {{ width: COLUMN_WIDTH }}> Salary </div>
         </div>
+        <List
+          height={600}
+          itemCount={employees.length}
+          itemSize={ROW_HEIGHT}
+          width={COLUMN_WIDTH * 4}
+          >
+            {({ index, style }) => (
+              <div style={{...style, display: 'flex', algignItems: 'center', borderbottom: '1px solid #ddd'}} className="row">
+                <div style={{ width: COLUMN_WIDTH, textAlign: 'center'}}>{employees[index].firstName} {employees[index].lastName}</div>
+                <div style={{ width: COLUMN_WIDTH, textAlign: 'center'}}>{employees[index].phoneNumber}</div>
+                <div style={{ width: COLUMN_WIDTH, textAlign: 'center'}}>{employees[index].jobRole}</div>
+                <div style={{ width: COLUMN_WIDTH, textAlign: 'center'}}>{employees[index].location}</div>
+                <div style={{ width: COLUMN_WIDTH, textAlign: 'center'}}>{employees[index].salary}</div>
+              </div>
+            )}
+        </List>
       </div>
+    </div>
     );
   };
   
