@@ -22,13 +22,17 @@ def create_random_person(id):
     hr_names = ['human resources', 'hr']
     return {
         "id": id,
+        "loginDetails": {
+            "username": fake.user_name(),
+            "password": fake.password(),
+        },
         "firstName": fake.first_name(),
         "lastName": fake.last_name(),
         "phoneNumber": f"({random.randint(100, 999)}) {random.randint(100, 999)}-{random.randint(1000, 9999)}",
         "jobRole": chosen_job,
         "isManager": "manager" in chosen_job.lower(),
         "isHR": any(job in chosen_job.lower() for job in hr_names),
-        "manages": [],
+        "managedBy": -1, # -1 if someone does not manage them
         "location": random.choice(locations),
         "salary": random.randint(35000, 150000)
     }
@@ -42,7 +46,7 @@ def assign_managers(people):
         print(managers)
         for person in non_managers:
             manager = random.choice(managers)
-            manager['manages'].append(person['id'])
+            person['managedBy'] = (manager['id'])
 
 
 def fill_db():
