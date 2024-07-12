@@ -24,6 +24,7 @@ def create_random_person(id):
         "id": id,
         "firstName": fake.first_name(),
         "lastName": fake.last_name(),
+        "phoneNumber": f"({random.randint(100, 999)}) {random.randint(100, 999)}-{random.randint(1000, 9999)}",
         "jobRole": chosen_job,
         "isManager": "manager" in chosen_job.lower(),
         "isHR": any(job in chosen_job.lower() for job in hr_names),
