@@ -34,6 +34,19 @@ app.get('/employees/', async (req, res) => {
     }
 });
 
+app.get('/employees/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const client = await MongoClient.connect(url);
+        const db = client.db(dbName);
+        const collection = db.collection(collectionName);
+        const employee = await collection.findOne({"id": +id});
+        res.json(employee)
+    } catch (err) {
+        console.error(`Error finding employee with ${id}: ${err}`)
+    }
+})
+
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });

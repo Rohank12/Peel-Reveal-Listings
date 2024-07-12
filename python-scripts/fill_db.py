@@ -12,12 +12,13 @@ jobs = [fake.job() for _ in range(10)]
 concrete_jobs = ["HR", "Systems Manager"]
 jobs += concrete_jobs
 
-def create_random_person(): 
+def create_random_person(id): 
     """jobs = ["Software Engineer", "Human Resources", "Product Manager",
             "Data Engineer", "Marketing Manager", "Systems Engineer",
             "HR Coordinator", "Project Manager", "Network Engineer"]"""
     chosen_job = random.choice(jobs)
     return {
+        "id": id,
         "firstName": fake.first_name(),
         "lastName": fake.last_name(),
         "jobRole": chosen_job,
@@ -43,7 +44,7 @@ def fill_db():
     # select collection / create if not existing
     collection = db[collection_name]
     
-    data = [create_random_person() for _ in range(20)]
+    data = [create_random_person(i+1) for i in range(20)]
 
     # deletes the entire collection (so we can add new data instead of appending)
     collection.delete_many({})
