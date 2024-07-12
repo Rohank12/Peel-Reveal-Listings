@@ -49,6 +49,26 @@ app.get('/employees/:id', async (req, res) => {
     }
 })
 
+app.post('/login', async (req, res) => {
+    const { username, password } = req.body;
+    try {
+        const client = await MongoClient.connect(url);
+        const db = client.db(dbName);
+        const collection = db.collection(collectionName);
+        const employee = await collection.findOne({
+            "loginDetails.username": username,
+            "loginDetails.password": password
+        });
+        if (employee) {
+            res.status(200).json(employee) 
+        } else {
+            res.status(401).json({message: "Authentication Failed"});
+        }
+    } catch (err) {
+        console.error("Login Error:", err)
+    }
+});
+
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });

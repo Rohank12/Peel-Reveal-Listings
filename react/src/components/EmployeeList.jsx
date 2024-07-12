@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../hooks/AuthContext';
 
 const EmployeeList = () => {
+    const { user } = useAuth(); // currently logged in user
     const [employees, setEmployees] = useState([]);
+    console.log(user)
   
     useEffect(() => {
       fetchEmployees();
