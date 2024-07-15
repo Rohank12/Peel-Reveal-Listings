@@ -12,7 +12,7 @@ jobs = [fake.job() for _ in range(10)]
 concrete_jobs = ["HR", "Systems Manager"]
 jobs += concrete_jobs
 
-num_people_to_be_generated = 20
+num_people_to_be_generated = 2000
 
 def create_random_person(id): 
     """jobs = ["Software Engineer", "Human Resources", "Product Manager",
@@ -22,12 +22,17 @@ def create_random_person(id):
     hr_names = ['human resources', 'hr']
     return {
         "id": id,
+        "loginDetails": {
+            "username": fake.user_name(),
+            "password": fake.password(),
+        },
         "firstName": fake.first_name(),
         "lastName": fake.last_name(),
+        "phoneNumber": f"({random.randint(100, 999)}) {random.randint(100, 999)}-{random.randint(1000, 9999)}",
         "jobRole": chosen_job,
         "isManager": "manager" in chosen_job.lower(),
         "isHR": any(job in chosen_job.lower() for job in hr_names),
-        "manages": [],
+        "managedBy": -1, # -1 if someone does not manage them
         "location": random.choice(locations),
         "salary": random.randint(35000, 150000)
     }
@@ -35,13 +40,21 @@ def create_random_person(id):
 def assign_managers(people): 
     # want to get all non managers
     non_managers = [person for person in people if not person['isManager']]
-    if len(non_managers) != len(people):
+    if len(non_managers) != len(people): # check if there are managers
         # want to get all managers
         managers = [person for person in people if person['isManager']]
-        print(managers)
+
         for person in non_managers:
             manager = random.choice(managers)
-            manager['manages'].append(person['id'])
+            person['managedBy'] = (manager['id'])
+
+        # this creates a cycle of managers (not sure we want it, subject to removal)
+        for manager in managers:
+            # get all other managers
+            other_managers = [person for person in managers if person['id'] != manager['id']]
+            # assign a random manager to the manager
+            if len(other_managers) > 0:
+                manager['managedBy'] = random.choice(other_managers)['id']
 
 
 def fill_db():
@@ -68,7 +81,7 @@ def fill_db():
     # insert data into collectoin (this will append)
     result = collection.insert_many(data)
 
-    print(f"Added {result.inserted_ids} to the collection")
+    #print(f"Added {result.inserted_ids} to the collection")
 
 fill_db()
 
