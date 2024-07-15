@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css'
 import Home from './components/Home'
 import PredictForm from './components/PredictForm'
-import Search from './components/Search'
 import EmployeeList from './components/EmployeeList'
 import Login from './components/Login'
 import { AuthProvider } from "./hooks/AuthContext";
@@ -26,12 +25,7 @@ const App = () => {
                 <a className="nav-link active" aria-current="page" href="#">Home</a>
               </li>
             </ul>
-            <form className="d-flex" role="search">
-              <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
-              <button className="btn btn-outline-success" type="submit">Search</button>
-            </form>
           </div>
-          <Search setData={employee} />
         </div>
       </nav>
       <main role="main" className="col-md-9 ml-sm-auto col-lg-10 px-md-4"></main>

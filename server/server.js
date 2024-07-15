@@ -28,19 +28,18 @@ app.get('/', async (req, res) => {
     }
 });
 
-app.post('/search', async (req, res) => {
+// Route to handle POST request for searching employees by first name
+app.post('/employees/search', async (req, res) => {
     try {
-        const { searchTerm } = req.body;
-        console.log(searchTerm);
+        const { firstName } = req.body;
         const client = await MongoClient.connect(url);
         const db = client.db(dbName);
         const collection = db.collection(collectionName);
-        const regex = new RegExp(searchTerm, 'i'); // Create a case-insensitive regular expression
-        const employees = await collection.find({ 'firstName': regex }).toArray();
-        res.json(employees);
-    } catch (err) {
-        console.error('Error:', err);
-        res.status(500).send('Hmm, something doesn\'t smell right... Error searching for socks');
+        const query = { firstName: { $regex: new RegExp(firstName, 'i') } };
+        const results = await collection.find(query).toArray();
+        res.json(results);
+    } catch (error) {
+        console.error('Error searching employees:', error);
     }
 });
 
