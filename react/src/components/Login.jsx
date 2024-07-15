@@ -16,8 +16,8 @@ const Login = () => {
     };
 
     return (
-        <div className="container">
-            <form onSubmit={handleLogin} className="mt-5">
+        <div className="container mt-5">
+            <form onSubmit={handleLogin} style={{ maxWidth: '400px', margin: '0 auto' }}>
                 <div className="form-group">
                     <label htmlFor="username">Username</label>
                     <input
@@ -40,10 +40,11 @@ const Login = () => {
                         onChange={(e) => setPassword(e.target.value)}
                     />
                 </div>
-                <button type="submit" className="btn btn-primary">Login</button>
+                <button type="submit" className="btn btn-primary btn-block">Login</button>
             </form>
         </div>
     );
+    
 };
 
 export default Login;
