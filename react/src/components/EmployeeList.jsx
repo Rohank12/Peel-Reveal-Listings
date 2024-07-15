@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/AuthContext';
 import { FixedSizeList as List } from 'react-window'
+import Search from './Search'
 
 const EmployeeList = () => {
     const { user } = useAuth(); // currently logged in user
@@ -56,6 +57,7 @@ const EmployeeList = () => {
     return (
       <div>
         <h2>Employee Directory</h2>
+        <Search setData={setEmployees}/>
         <div>
           <div style= {{ display: 'flex', borderBottom: '1px solid #ddd'}}>
           <div style= {{ width: COLUMN_WIDTH }}> Name </div>

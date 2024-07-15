@@ -28,6 +28,21 @@ app.get('/', async (req, res) => {
     }
 });
 
+// Route to handle POST request for searching employees by first name
+app.post('/employees/search', async (req, res) => {
+    try {
+        const { firstName } = req.body;
+        const client = await MongoClient.connect(url);
+        const db = client.db(dbName);
+        const collection = db.collection(collectionName);
+        const query = { firstName: { $regex: new RegExp(firstName, 'i') } };
+        const results = await collection.find(query).toArray();
+        res.json(results);
+    } catch (error) {
+        console.error('Error searching employees:', error);
+    }
+});
+
 app.get('/employees/', async (req, res) => {
     try {
         const client = await MongoClient.connect(url);
