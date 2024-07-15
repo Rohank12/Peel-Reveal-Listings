@@ -6,9 +6,8 @@ import { FixedSizeList as List } from 'react-window'
 const EmployeeList = () => {
     const { user } = useAuth(); // currently logged in user
     const [employees, setEmployees] = useState([]);
-    console.log(user)
     const ROW_HEIGHT = 50;
-    const COLUMN_WIDTH = 300;
+    const COLUMN_WIDTH = 250;
   
     useEffect(() => {
       fetchEmployees();
@@ -26,7 +25,34 @@ const EmployeeList = () => {
         console.error('Error fetching characters:', error);
       }
     };
-  
+
+    const convertSalaryToCurrency = (salary) => {
+      return salary.toLocaleString("en-US", {
+        style: "currency",
+        currency: "USD",
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      });
+    };
+
+    const salaryLogic = (employee) => {
+      if (!user) {
+        return "Salary Hidden"; // not-logged in users
+      } else if (user.isHR) {
+        // show all salaries
+        return convertSalaryToCurrency(employee.salary);
+      } else if (employee.managedBy === user.id) {
+        // show only salaries of people who direct report to id
+        return convertSalaryToCurrency(employee.salary);
+      } else if (employee.id === user.id) {
+        // show only user salary and no one elses
+        return convertSalaryToCurrency(employee.salary);
+      } else {
+        // hide salary
+        return "Salary Hidden";
+      }
+    };
+
     return (
       <div>
         <h2>Employee Directory</h2>
@@ -42,7 +68,7 @@ const EmployeeList = () => {
           height={600}
           itemCount={employees.length}
           itemSize={ROW_HEIGHT}
-          width={COLUMN_WIDTH * 4}
+          width={COLUMN_WIDTH * 5}
           >
             {({ index, style }) => (
               <div style={{...style, display: 'flex', algignItems: 'center', borderbottom: '1px solid #ddd'}} className="row">
@@ -50,7 +76,7 @@ const EmployeeList = () => {
                 <div style={{ width: COLUMN_WIDTH, textAlign: 'center'}}>{employees[index].phoneNumber}</div>
                 <div style={{ width: COLUMN_WIDTH, textAlign: 'center'}}>{employees[index].jobRole}</div>
                 <div style={{ width: COLUMN_WIDTH, textAlign: 'center'}}>{employees[index].location}</div>
-                <div style={{ width: COLUMN_WIDTH, textAlign: 'center'}}>{employees[index].salary}</div>
+                <div style={{ width: COLUMN_WIDTH, textAlign: 'center'}}>{salaryLogic(employees[index])}</div>
               </div>
             )}
         </List>
