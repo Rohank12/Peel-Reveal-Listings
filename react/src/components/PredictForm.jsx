@@ -6,6 +6,7 @@ const PredictForm = () => {
     const [location, setLocation] = useState('');
     const [jobOptions, setJobOptions] = useState([]);
     const [locationOptions, setLocationOptions] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         // Fetch job options from /jobs endpoint
@@ -29,6 +30,7 @@ const PredictForm = () => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
+        setIsLoading(true);
 
         // Make a POST request to /predict route handler with jobRole and location
         fetch('http://localhost:3000/predict', {
@@ -40,8 +42,9 @@ const PredictForm = () => {
         })
             .then(response => response.json())
             .then(data => {
+                setIsLoading(false);
                 // Handle the response data
-                setPrediction(data)
+                setPrediction(data);
                 console.log(data); // want this to be stored
             })
             .catch(error => {
@@ -75,7 +78,7 @@ const PredictForm = () => {
                 <br />
                 <button type="submit">Predict</button>
             </form>
-            <div>Prediction: {prediction}</div>
+            <div>Prediction: {isLoading ? 'Loading...': prediction}</div>
         </div>
     );
 };
