@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from './components/Home'
 import PredictForm from './components/PredictForm'
-import Search from './components/Search'
 import EmployeeList from './components/EmployeeList'
 import Login from './components/Login'
 import Navigation from './components/Navigation';
@@ -13,8 +12,8 @@ import 'bootstrap/dist/js/bootstrap.js'
 const App = () => {
   
   //const [employees, setEmployees] = useState(employeesData);
-
   return (
+    <>
     <Router>
       <div>
         <Navigation />
@@ -29,6 +28,7 @@ const App = () => {
         </AuthProvider>
       </div>
     </Router>
+    </>
   );
 };
 
