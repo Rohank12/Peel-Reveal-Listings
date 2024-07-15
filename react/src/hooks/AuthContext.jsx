@@ -19,12 +19,7 @@ export const AuthProvider = ({ children }) => {
             const data = await response.json();
             console.log("DATA RECEIVED: ", data)
             if (data._id) {
-                setUser({
-                    data // storing all data atm
-                   // username,
-                   // id: data.id, // Storing the id from the server
-
-                });
+                setUser(data);
             } else {
                 throw new Error(data.message || 'Login failed');
             }
