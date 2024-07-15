@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 const PredictForm = () => {
+    const [prediction, setPrediction] = useState('');
     const [jobRole, setJobRole] = useState('');
     const [location, setLocation] = useState('');
     const [jobOptions, setJobOptions] = useState([]);
@@ -40,6 +41,7 @@ const PredictForm = () => {
             .then(response => response.json())
             .then(data => {
                 // Handle the response data
+                setPrediction(data)
                 console.log(data); // want this to be stored
             })
             .catch(error => {
@@ -49,29 +51,32 @@ const PredictForm = () => {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <label>
-                Job Title:
-                <select value={jobRole} onChange={handlejobRoleChange}>
-                    <option value="">Select a job title</option>
-                    {jobOptions.map((job, index) => (
-                        <option key={index} value={job}>{job}</option>
-                    ))}
-                </select>
-            </label>
-            <br />
-            <label>
-                Location:
-                <select value={location} onChange={handleLocationChange}>
-                    <option value="">Select a location</option>
-                    {locationOptions.map((location, index) => (
-                        <option key={index} value={location}>{location}</option>
-                    ))}
-                </select>
-            </label>
-            <br />
-            <button type="submit">Predict</button>
-        </form>
+        <div>
+            <form onSubmit={handleSubmit}>
+                <label>
+                    Job Title:
+                    <select value={jobRole} onChange={handlejobRoleChange}>
+                        <option value="">Select a job title</option>
+                        {jobOptions.map((job, index) => (
+                            <option key={index} value={job}>{job}</option>
+                        ))}
+                    </select>
+                </label>
+                <br />
+                <label>
+                    Location:
+                    <select value={location} onChange={handleLocationChange}>
+                        <option value="">Select a location</option>
+                        {locationOptions.map((location, index) => (
+                            <option key={index} value={location}>{location}</option>
+                        ))}
+                    </select>
+                </label>
+                <br />
+                <button type="submit">Predict</button>
+            </form>
+            <div>Prediction: {prediction}</div>
+        </div>
     );
 };
 

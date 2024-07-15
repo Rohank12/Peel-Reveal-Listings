@@ -3,15 +3,13 @@ import express from 'express';
 import { MongoClient, ObjectId } from 'mongodb';
 import { spawn } from 'child_process';
 import dotenv from 'dotenv';
+import path from 'path';
 import cors from 'cors'
 
-dotenv.config();
-const url = "mongodb://localhost:27017"
-const dbName = "directory"
-const collectionName = "employees"
-// const url = process.env.MONGODB_URL;
-// const dbName = process.env.MONGO_DB;
-// const collectionName = process.env.MONGO_DB_COLLECTION;
+dotenv.config()
+const url = process.env.MONGO_DB_URL;
+const dbName = process.env.MONGO_DB;
+const collectionName = process.env.MONGO_DB_COLLECTION;
 
 const app = express();
 // Middleware to parse JSON bodies
@@ -100,11 +98,15 @@ app.post('/login', async (req, res) => {
 app.post('/predict', async (req, res) => {
     const { jobRole, location } = req.body;
     
-    // current working directory
-    //const scriptPath = `/Users/rohankelley/Documents/Peel-Reveal-Listings/python-scripts/predict.py`
-    // Fix ^ this to be a relative path and not hardcoded
-    // and this below cwd for the python script
-    const pythonProcess = spawn('python', [scriptPath, jobRole, location], { cwd: '/Users/rohankelley/Documents/Peel-Reveal-Listings/python-scripts' });
+    // getting the script path defined in .env
+    let scriptPath = process.env.SCRIPT_PATH
+    scriptPath = path.normalize(scriptPath)
+    
+    // getting the location of the script in .env
+    let cwdPath = process.env.CWD_PATH
+    cwdPath = path.normalize(cwdPath)
+
+    const pythonProcess = spawn('python', [scriptPath, jobRole, `${location}`], { cwd: cwdPath });
     pythonProcess.stdout.on('data', (data) => {
         res.json(data.toString())
     });
