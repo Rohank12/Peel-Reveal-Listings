@@ -16,6 +16,7 @@ const App = () => {
       <div>
         <AuthProvider>
         <Routes>
+          <Route exact path="/" element={<Home />} />
           <Route exact path="/login" element={<Login />} />
           <Route exact path="/employees" element={<EmployeeList />} />
         </Routes>
