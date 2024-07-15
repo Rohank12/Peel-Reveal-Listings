@@ -8,7 +8,7 @@ const EmployeeList = () => {
     const { user } = useAuth(); // currently logged in user
     const [employees, setEmployees] = useState([]);
     const ROW_HEIGHT = 50;
-    const COLUMN_WIDTH = 250;
+    const COLUMN_WIDTH = 150;
   
     useEffect(() => {
       fetchEmployees();
@@ -46,7 +46,7 @@ const EmployeeList = () => {
         // show only salaries of people who direct report to id
         return convertSalaryToCurrency(employee.salary);
       } else if (employee.id === user.id) {
-        // show only user salary and no one elses
+        // show user salary 
         return convertSalaryToCurrency(employee.salary);
       } else {
         // hide salary
@@ -73,7 +73,7 @@ const EmployeeList = () => {
           width={COLUMN_WIDTH * 5}
           >
             {({ index, style }) => (
-              <div style={{...style, display: 'flex', algignItems: 'center', borderbottom: '1px solid #ddd'}} className="row">
+              <div style={{...style, display: 'flex', alignItems: 'center', borderBottom: '1px solid #ddd'}} className="row">
                 <div style={{ width: COLUMN_WIDTH, textAlign: 'center'}}>{employees[index].firstName} {employees[index].lastName}</div>
                 <div style={{ width: COLUMN_WIDTH, textAlign: 'center'}}>{employees[index].phoneNumber}</div>
                 <div style={{ width: COLUMN_WIDTH, textAlign: 'center'}}>{employees[index].jobRole}</div>
