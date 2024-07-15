@@ -8,6 +8,8 @@ import '../App.css'
 const EmployeeList = () => {
     const { user } = useAuth(); // currently logged in user
     const [employees, setEmployees] = useState([]);
+    const [sortNameOrder, setSortNameOrder] = useState(1);
+    const [sortSalaryOrder, setSortSalaryOrder] = useState(1);
     const ROW_HEIGHT = 50;
     const COLUMN_WIDTH = 150;
   
@@ -55,6 +57,29 @@ const EmployeeList = () => {
       }
     };
 
+    const sortEmployees = () => {
+      console.log(sortSalaryOrder)
+      setEmployees(prevEmployees => {
+        return [...prevEmployees].sort((a, b) => {
+          const aSalary = salaryLogic(a) === 'Salary Hidden' ? -1 : a.salary;
+          const bSalary = salaryLogic(b) === 'Salary Hidden' ? -1 : b.salary;
+          return sortSalaryOrder * bSalary - aSalary;
+        });
+      });
+      setSortSalaryOrder(sortSalaryOrder * -1); // reverse search
+    };
+
+    const sortByName = () => {
+      console.log(sortNameOrder)
+      setEmployees(prevEmployees => {
+        return [...prevEmployees].sort((a, b) => {
+          const aName = a.lastName;
+          const bName = b.lastName;
+          return sortNameOrder * aName.localeCompare(bName);
+        });
+      });
+      setSortNameOrder(sortNameOrder * -1); // reverse search
+    };
     return (
       <div>
         <h2>Employee Directory</h2>
@@ -62,11 +87,11 @@ const EmployeeList = () => {
         <table className = "table table-striped">
           <thead>
           <tr>
-            <th>Name</th>
+            <th onClick={sortByName}>Name</th>
             <th>Phone Number</th>
             <th>Job Role</th>
             <th>Work Location</th>
-            <th>Salary</th>
+            <th onClick={sortEmployees}>Salary</th>
           </tr>
           </thead>
         <tbody>

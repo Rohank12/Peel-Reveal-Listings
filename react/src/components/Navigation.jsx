@@ -1,6 +1,11 @@
 import React from 'react';
+import { useAuth } from '../hooks/AuthContext';
 
 const Navigation = () => {
+  const data = useAuth();
+  if (!data) {
+    console.log("YEP")
+  }
     return (
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
       <div className="container-fluid">
