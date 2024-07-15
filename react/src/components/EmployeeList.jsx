@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/AuthContext';
 import { FixedSizeList as List } from 'react-window'
 import Search from './Search'
+import '../App.css'
 
 const EmployeeList = () => {
     const { user } = useAuth(); // currently logged in user
@@ -58,31 +59,28 @@ const EmployeeList = () => {
       <div>
         <h2>Employee Directory</h2>
         <Search setData={setEmployees}/>
-        <div>
-          <div style= {{ display: 'flex', borderBottom: '1px solid #ddd'}}>
-          <div style= {{ width: COLUMN_WIDTH }}> Name </div>
-          <div style= {{ width: COLUMN_WIDTH }}> Phone Number </div>
-          <div style= {{ width: COLUMN_WIDTH }}> Job Role </div>
-          <div style= {{ width: COLUMN_WIDTH }}> Work Location </div>
-          <div style= {{ width: COLUMN_WIDTH }}> Salary </div>
-        </div>
-        <List
-          height={600}
-          itemCount={employees.length}
-          itemSize={ROW_HEIGHT}
-          width={COLUMN_WIDTH * 5}
-          >
-            {({ index, style }) => (
-              <div style={{...style, display: 'flex', alignItems: 'center', borderBottom: '1px solid #ddd'}} className="row">
-                <div style={{ width: COLUMN_WIDTH, textAlign: 'center'}}>{employees[index].firstName} {employees[index].lastName}</div>
-                <div style={{ width: COLUMN_WIDTH, textAlign: 'center'}}>{employees[index].phoneNumber}</div>
-                <div style={{ width: COLUMN_WIDTH, textAlign: 'center'}}>{employees[index].jobRole}</div>
-                <div style={{ width: COLUMN_WIDTH, textAlign: 'center'}}>{employees[index].location}</div>
-                <div style={{ width: COLUMN_WIDTH, textAlign: 'center'}}>{salaryLogic(employees[index])}</div>
-              </div>
-            )}
-        </List>
-      </div>
+        <table className = "table table-striped">
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Phone Number</th>
+            <th>Job Role</th>
+            <th>Work Location</th>
+            <th>Salary</th>
+          </tr>
+          </thead>
+        <tbody>
+          {employees.map((employee, index) => (
+            <tr key={index}>
+              <td>{employee.firstName} {employee.lastName}</td>
+              <td>{employee.phoneNumber}</td>
+              <td>{employee.jobRole}</td>
+              <td>{employee.location}</td>
+              <td>{salaryLogic(employee)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
     );
   };
