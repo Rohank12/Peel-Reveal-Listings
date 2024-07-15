@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 const Search = (props) => {
     const [searchTerm, setSearchTerm] = useState('');
-    const [searchResults, setSearchResults] = useState([]);
+    const [searchResults, setSearchResults] = useState('');
 
 
     const handleSubmit = event => {
@@ -29,7 +29,7 @@ const Search = (props) => {
           employee.firstName.toLowerCase().includes(searchTerm.toLowerCase())
         );
         setSearchResults(results);
-      };
+      
 
     const handleChange = (e) => {
         setSearchTerm(e.target.value);

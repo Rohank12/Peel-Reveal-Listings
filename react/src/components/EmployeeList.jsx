@@ -27,7 +27,7 @@ const EmployeeList = () => {
         <div className="employee-list">
           {employees.map((employee) => (
             <div key={employee.id} className="employee-item">
-              <p>{employee.location}</p>
+              <p>{employee.firstName}</p>
             </div>
           ))}
         </div>

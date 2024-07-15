@@ -8,7 +8,6 @@ import EmployeeList from './components/EmployeeList'
 const App = () => {
   
   //const [employees, setEmployees] = useState(employeesData);
-
   return (
     <>
     <Router>
@@ -27,11 +26,9 @@ const App = () => {
             <form className="d-flex" role="search">
               <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
               <button className="btn btn-outline-success" type="submit">Search</button>
-              <Link className="nav-link" to="/search">
-                Search
-              </Link>
             </form>
           </div>
+          <Search setData={employee} />
         </div>
       </nav>
       <main role="main" className="col-md-9 ml-sm-auto col-lg-10 px-md-4"></main>
@@ -39,7 +36,6 @@ const App = () => {
         <div>
           <Routes>
             <Route exact path="/employees" element={<EmployeeList />} />
-            <Route path="/search" element={<Search />} />
           </Routes>
         </div>
       </Router>

@@ -24,6 +24,22 @@ app.get('/', async (req, res) => {
     }
 });
 
+app.post('/search', async (req, res) => {
+    try {
+        const { searchTerm } = req.body;
+        console.log(searchTerm);
+        const client = await MongoClient.connect(url);
+        const db = client.db(dbName);
+        const collection = db.collection(collectionName);
+        const regex = new RegExp(searchTerm, 'i'); // Create a case-insensitive regular expression
+        const employees = await collection.find({ 'firstName': regex }).toArray();
+        res.json(employees);
+    } catch (err) {
+        console.error('Error:', err);
+        res.status(500).send('Hmm, something doesn\'t smell right... Error searching for socks');
+    }
+});
+
 app.get('/employees/', async (req, res) => {
     try {
         const client = await MongoClient.connect(url);
