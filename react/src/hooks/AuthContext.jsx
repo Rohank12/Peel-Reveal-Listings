@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 
 // Creating an authentication context
 const AuthContext = createContext(null);
@@ -6,6 +6,14 @@ const AuthContext = createContext(null);
 // Auth provider component that wraps your app components
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
+
+    useEffect(() => {
+        // check localStorage for user data on app start
+        const storedUser = localStorage.getItem('user');
+        if (storedUser) {
+          setUser(JSON.parse(storedUser));
+        }
+      }, []);
 
     const login = async (username, password) => {
         try { // change link eventually
@@ -20,15 +28,18 @@ export const AuthProvider = ({ children }) => {
             console.log("DATA RECEIVED: ", data)
             if (data._id) {
                 setUser(data);
+                localStorage.setItem('user', JSON.stringify(data));
             } else {
                 throw new Error(data.message || 'Login failed');
             }
         } catch (error) {
             console.error(error);
+            throw error; // throw again for login
         }
     };
 
     const logout = () => {
+        localStorage.removeItem('user');
         setUser(null); // In real scenarios, you might want to invalidate the session on the server as well
     };
 

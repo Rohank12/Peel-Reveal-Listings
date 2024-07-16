@@ -3,10 +3,13 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/AuthContext';
 import { FixedSizeList as List } from 'react-window'
 import Search from './Search'
+import '../App.css'
 
 const EmployeeList = () => {
     const { user } = useAuth(); // currently logged in user
     const [employees, setEmployees] = useState([]);
+    const [sortNameOrder, setSortNameOrder] = useState(1);
+    const [sortSalaryOrder, setSortSalaryOrder] = useState(1);
     const ROW_HEIGHT = 50;
     const COLUMN_WIDTH = 150;
   
@@ -54,35 +57,55 @@ const EmployeeList = () => {
       }
     };
 
+    const sortEmployees = () => {
+      console.log(sortSalaryOrder)
+      setEmployees(prevEmployees => {
+        return [...prevEmployees].sort((a, b) => {
+          const aSalary = salaryLogic(a) === 'Salary Hidden' ? -1 : a.salary;
+          const bSalary = salaryLogic(b) === 'Salary Hidden' ? -1 : b.salary;
+          return sortSalaryOrder * bSalary - aSalary;
+        });
+      });
+      setSortSalaryOrder(sortSalaryOrder * -1); // reverse search
+    };
+
+    const sortByName = () => {
+      console.log(sortNameOrder)
+      setEmployees(prevEmployees => {
+        return [...prevEmployees].sort((a, b) => {
+          const aName = a.lastName;
+          const bName = b.lastName;
+          return sortNameOrder * aName.localeCompare(bName);
+        });
+      });
+      setSortNameOrder(sortNameOrder * -1); // reverse search
+    };
     return (
       <div>
         <h2>Employee Directory</h2>
         <Search setData={setEmployees}/>
-        <div>
-          <div style= {{ display: 'flex', borderBottom: '1px solid #ddd'}}>
-          <div style= {{ width: COLUMN_WIDTH }}> Name </div>
-          <div style= {{ width: COLUMN_WIDTH }}> Phone Number </div>
-          <div style= {{ width: COLUMN_WIDTH }}> Job Role </div>
-          <div style= {{ width: COLUMN_WIDTH }}> Work Location </div>
-          <div style= {{ width: COLUMN_WIDTH }}> Salary </div>
-        </div>
-        <List
-          height={600}
-          itemCount={employees.length}
-          itemSize={ROW_HEIGHT}
-          width={COLUMN_WIDTH * 5}
-          >
-            {({ index, style }) => (
-              <div style={{...style, display: 'flex', alignItems: 'center', borderBottom: '1px solid #ddd'}} className="row">
-                <div style={{ width: COLUMN_WIDTH, textAlign: 'center'}}>{employees[index].firstName} {employees[index].lastName}</div>
-                <div style={{ width: COLUMN_WIDTH, textAlign: 'center'}}>{employees[index].phoneNumber}</div>
-                <div style={{ width: COLUMN_WIDTH, textAlign: 'center'}}>{employees[index].jobRole}</div>
-                <div style={{ width: COLUMN_WIDTH, textAlign: 'center'}}>{employees[index].location}</div>
-                <div style={{ width: COLUMN_WIDTH, textAlign: 'center'}}>{salaryLogic(employees[index])}</div>
-              </div>
-            )}
-        </List>
-      </div>
+        <table className = "table table-striped">
+          <thead>
+          <tr>
+            <th onClick={sortByName}>Name</th>
+            <th>Phone Number</th>
+            <th>Job Role</th>
+            <th>Work Location</th>
+            <th onClick={sortEmployees}>Salary</th>
+          </tr>
+          </thead>
+        <tbody>
+          {employees.map((employee, index) => (
+            <tr key={index}>
+              <td>{employee.firstName} {employee.lastName}</td>
+              <td>{employee.phoneNumber}</td>
+              <td>{employee.jobRole}</td>
+              <td>{employee.location}</td>
+              <td>{salaryLogic(employee)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
     );
   };
