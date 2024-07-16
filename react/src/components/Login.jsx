@@ -5,19 +5,26 @@ import { useNavigate } from 'react-router-dom';
 const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
     const { login } = useAuth();
     const navigate = useNavigate();
 
     const handleLogin = async (event) => {
         event.preventDefault();
-        await login(username, password);
         console.log(username, password);
-        navigate('/employees');
+        try {
+            await login(username, password);
+            navigate('/employees');
+        } catch (error) {
+            setError('Authentication Failed');
+            console.error('Login error:', error);
+        }
     };
 
     return (
         <div className="container mt-5">
             <form onSubmit={handleLogin} style={{ maxWidth: '400px', margin: '0 auto' }}>
+                {error && <div className="alert alert-danger" role="alert">{error}</div>}
                 <div className="form-group">
                     <label htmlFor="username">Username</label>
                     <input

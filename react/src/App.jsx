@@ -16,8 +16,8 @@ const App = () => {
     <>
     <Router>
       <div>
-        <Navigation />
         <AuthProvider>
+        <Navigation />
         <Routes>
           <Route exact path="/" element={<Home />} />
           <Route exact path="/login" element={<Login />} />
